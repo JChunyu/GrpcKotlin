@@ -16,7 +16,7 @@ import io.grpc.okhttp.OkHttpServerBuilder
  * @description
  */
 class HelloWorldServer(private val port: Int) {
-    private val server: Server =
+    val server: Server =
         NettyServerBuilder
             .forPort(port)
             .addService(HelloWorldService())
@@ -45,7 +45,7 @@ class HelloWorldServer(private val port: Int) {
         )
     }
 
-    private fun stop() {
+    fun stop() {
         server.shutdown()
     }
 
@@ -55,9 +55,9 @@ class HelloWorldServer(private val port: Int) {
 }
 
 
-fun main() {
-    val port = System.getenv("PORT")?.toInt() ?: 50051
-    val server = HelloWorldServer(port)
-    server.start()
-    server.blockUntilShutdown()
-}
+//fun main() {
+//    val port = System.getenv("PORT")?.toInt() ?: 50051
+//    val server = HelloWorldServer(port)
+//    server.start()
+//    server.blockUntilShutdown()
+//}

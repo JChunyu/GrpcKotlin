@@ -4,6 +4,7 @@ import com.google.protobuf.Empty
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
 import io.grpc.examples.helloworld.GreeterGrpcKt
+import io.grpc.examples.helloworld.HelloReply
 import io.grpc.examples.helloworld.helloRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,34 +17,35 @@ import kotlinx.coroutines.runBlocking
  * @date 2024/3/27
  * @description
  */
-class HelloWorldClient(private val channel: ManagedChannel) {
+class HelloWorldClient(channel: ManagedChannel) {
     private val stub: GreeterGrpcKt.GreeterCoroutineStub =
         GreeterGrpcKt.GreeterCoroutineStub(channel)
 
-    suspend fun sayHello(name: String) {
+    suspend fun sayHello(name: String): HelloReply {
         val request = helloRequest { this.name = name }
         val response = stub.sayHello(request)
         println("Received: ${response.message}")
+        return response
     }
 
-    suspend fun sayGreet() {
-        val request = helloRequest { this.name = name }
+    suspend fun sayGreet(): HelloReply {
         val response = stub.sayGreet(Empty.newBuilder().build())
         println("Received: ${response.message}")
+        return response
     }
 }
 
 
-fun main() {
-    runBlocking {
-        val port = 50051
-        val channel = ManagedChannelBuilder.forAddress("localhost", port).usePlaintext().build()
-        val client = HelloWorldClient(channel)
-        println("call sayHello")
-        client.sayHello("user")
-        while (true) {
-            Thread.sleep(3000)
-            println("time next")
-        }
-    }
-}
+//fun main() {
+//    runBlocking {
+//        val port = 50051
+//        val channel = ManagedChannelBuilder.forAddress("localhost", port).usePlaintext().build()
+//        val client = HelloWorldClient(channel)
+//        println("call sayHello")
+//        client.sayHello("user")
+//        while (true) {
+//            Thread.sleep(3000)
+//            println("time next")
+//        }
+//    }
+//}
